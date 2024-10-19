@@ -14,14 +14,14 @@ const ResumeUploader: React.FC<ResumeUploaderProps> = ({ onUpload }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex items-center">
+    <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row items-stretch sm:items-center">
       <input
         type="file"
         id="resumeFile"
         name="resumeFile"
         accept=".pdf"
         required
-        className="flex-grow mr-2 p-2 border border-gray-300 rounded"
+        className="flex-grow mb-2 sm:mb-0 sm:mr-2 p-2 border border-gray-300 rounded"
       />
       <button
         type="submit"
