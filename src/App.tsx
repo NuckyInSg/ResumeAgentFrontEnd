@@ -3,13 +3,16 @@ import { Upload, FileText, Download } from 'lucide-react';
 import ResumeUploader from './components/ResumeUploader';
 import JsonEditor from './components/JsonEditor';
 import StatusMessage from './components/StatusMessage';
+import LoadingModal from './components/LoadingModal';
 import { API_BASE_URL } from './config';
 
 function App() {
   const [originalJson, setOriginalJson] = useState('');
   const [status, setStatus] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleUpload = async (file: File) => {
+    setIsLoading(true);
     setStatus('Uploading and converting PDF to JSON...');
     const formData = new FormData();
     formData.append('file', file);
@@ -30,6 +33,8 @@ function App() {
       }
     } catch (error) {
       setStatus(`Error: ${(error as Error).message}`);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -72,7 +77,7 @@ function App() {
   return (
     <div className="min-h-screen bg-gray-100 py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-3xl mx-auto">
-        <h1 className="text-3xl font-bold text-center text-gray-900 mb-8">Resume Converter</h1>
+        <h1 className="text-3xl font-bold text-center text-gray-900 mb-8">Better Resume</h1>
         <div className="bg-white shadow-md rounded-lg p-6 mb-8">
           <h2 className="text-xl font-semibold mb-4 flex items-center">
             <Upload className="mr-2" /> Upload Resume
@@ -87,12 +92,14 @@ function App() {
           <button
             onClick={handleGenerate}
             className="mt-4 w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded flex items-center justify-center"
+            disabled={!originalJson}
           >
             <Download className="mr-2" /> Generate PDF
           </button>
         </div>
         <StatusMessage message={status} />
       </div>
+      <LoadingModal isOpen={isLoading} message="Uploading and converting PDF to JSON. This may take a few moments..." />
     </div>
   );
 }
